@@ -11,9 +11,13 @@ const Login = ({ onLoginSuccess }) => {
     try {
       const { data } = await loginUser({ email, password });
       const token = data.token;
+      const userId = data.userId; // Assuming API returns user ID
+      const role = data.role; // Assuming API returns user role (e.g., admin or responsible)
 
-      // Save token to localStorage
+      // Save token, role, and user ID to localStorage
       localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId);
+      localStorage.setItem('role', role);
 
       // Set token for API requests
       setAuthToken(token);
