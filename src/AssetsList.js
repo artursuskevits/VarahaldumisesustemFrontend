@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchAssets, fetchUsers, deleteAsset, updateAsset } from './api'; // Ensure API methods are implemented
 import { useNavigate } from 'react-router-dom';
 import './styles.css';
+import './gaga.js';
 
 const AssetsList = () => {
   const [assets, setAssets] = useState([]);
