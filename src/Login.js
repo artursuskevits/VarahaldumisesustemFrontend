@@ -1,59 +1,52 @@
-import React, { useState } from 'react';
-import { loginUser, setAuthToken } from './api';
+import React, { useState } from "react";
+import axios from "axios";
+import './styles.css';
+
 
 const Login = ({ onLoginSuccess }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await loginUser({ email, password });
-      const token = data.token;
-      const userId = data.userId; // Assuming API returns user ID
-      const role = data.role; // Assuming API returns user role (e.g., admin or responsible)
+      const response = await axios.post("https://localhost:7277/api/authentication/login", { email, password });
+      const user = response.data;
 
-      // Save token, role, and user ID to localStorage
-      localStorage.setItem('token', token);
-      localStorage.setItem('userId', userId);
-      localStorage.setItem('role', role);
-
-      // Set token for API requests
-      setAuthToken(token);
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("role", user.role);
+      localStorage.setItem("userId", user.id);
 
       onLoginSuccess();
-    } catch (err) {
-      setError('Invalid credentials, please try again.');
+    } catch (error) {
+      console.error("Login failed:", error.response?.data || error.message);
+      alert("Invalid email or password");
     }
   };
 
   return (
-    <div>
+    <form onSubmit={handleLogin}>
       <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Login</button>
-      </form>
-    </div>
+      <div>
+        <label>Email:</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label>Password:</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+      <button type="submit">Login</button>
+    </form>
   );
 };
 

@@ -9,9 +9,7 @@ const Assets = ({ onLogout }) => {
 
   return (
     <div>
-      <button onClick={onLogout} style={{ marginBottom: '10px' }}>
-        Logout
-      </button>
+     
       <AssetsList />
       <AddAssetForm onAssetAdded={handleAssetAdded} />
     </div>
